@@ -10,6 +10,7 @@ def main(
     input_path: Path = typer.Argument(..., exists=True, dir_okay=False),
     output_path: Path = typer.Argument(..., dir_okay=False),
 ):
+    print(f"Starting preprocessing!")
     nlp = spacy.blank("en")
     doc_bin = DocBin(attrs=["ENT_IOB", "ENT_TYPE"])
     for eg in srsly.read_jsonl(input_path):

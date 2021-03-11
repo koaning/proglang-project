@@ -5,9 +5,9 @@ vars:
   config: "config.cfg"
   name: "ner_proglang"
   version: "0.0.0"
-  train: "stack-overflow-labels-train"
-  dev: "proglang_eval"
-  patterns: "proglang_patterns"
+  train: "stackoverflow-train"
+  valid: "stackoverflow-valid"
+  patterns: "proglang_patterns.jsonl"
 
 # These are the directories that the project needs. The project CLI will make
 # sure that they always exist.
@@ -19,10 +19,8 @@ directories: ["assets", "training", "configs", "scripts", "corpus", "packages"]
 assets:
   - dest: "assets/${vars.train}.jsonl"
     description: "JSONL-formatted training data"
-  - dest: "assets/${vars.dev}.jsonl"
-    description: "JSONL-formatted training data"
-  - dest: "configs/${vars.patterns}.jsonl"
-    description: "Patterns file generated with `sense2vec.teach` and used to pre-highlight during annotation (100 patterns)"
+  - dest: "assets/${vars.valid}.jsonl"
+    description: "JSONL-formatted validation data"
 
 # Workflows are sequences of commands (see below) executed in order. You can
 # run them via "spacy project run [workflow]". If a commands's inputs/outputs
@@ -30,6 +28,7 @@ assets:
 workflows:
   all:
     - preprocess
+    - patternmod
     - train
     - evaluate
 
@@ -42,11 +41,23 @@ commands:
     help: "Convert the data to spaCy's binary format"
     script:
       - "python scripts/preprocess.py assets/${vars.train}.jsonl corpus/${vars.train}.spacy"
+      - "python scripts/preprocess.py assets/${vars.valid}.jsonl corpus/${vars.valid}.spacy"
     deps:
       - "assets/${vars.train}.jsonl"
+      - "assets/${vars.valid}.jsonl"
       - "scripts/preprocess.py"
     outputs:
       - "corpus/${vars.train}.spacy"
+      - "corpus/${vars.valid}.spacy"
+
+  - name: "patternmod"
+    help: "Generate a named entity recognition model based on rules."
+    script:
+      - "python scripts/save_pattern_model.py configs/${vars.patterns} training/model-pattern"
+    deps:
+      - "configs/${vars.patterns}"
+    outputs:
+      - "training/model-pattern"
 
   - name: "train"
     help: "Train a named entity recognition model"
@@ -60,12 +71,15 @@ commands:
   - name: "evaluate"
     help: "Evaluate the model and export metrics"
     script:
-      - "python -m spacy evaluate training/model-best corpus/${vars.dev}.spacy --output training/metrics.json"
+      - "python -m spacy evaluate training/model-best corpus/${vars.valid}.spacy --output training/model-metrics.json"
+      - "python -m spacy evaluate training/model-pattern corpus/${vars.valid}.spacy --output training/pattern-metrics.json"
     deps:
-      - "corpus/${vars.dev}.spacy"
+      - "training/model-pattern"
       - "training/model-best"
+      - "corpus/${vars.valid}.spacy"
     outputs:
-      - "training/metrics.json"
+      - "training/model-metrics.json"
+      - "training/pattern-metrics.json"
 
   - name: package
     help: "Package the trained model so it can be installed"
@@ -76,10 +90,10 @@ commands:
     outputs_no_cache:
       - "packages/en_${vars.name}-${vars.version}/dist/en_${vars.name}-${vars.version}.tar.gz"
 
-  - name: "visualize-model"
-    help: "Visualize the model's output interactively using Streamlit"
+  - name: "show-stats"
+    help: "Show the statistics that compares both models."
     script:
-      - "streamlit run scripts/visualize_model.py training/model-best 'I really like python.'"
+      - "python scripts/print_stats.py"
     deps:
-      - "scripts/visualize_model.py"
-      - "training/model-best"
+      - "training/model-metrics.json"
+      - "training/pattern-metrics.json"

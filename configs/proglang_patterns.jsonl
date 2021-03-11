@@ -1,7 +1,7 @@
 {"label":"PROGLANG","pattern":[{"LOWER":"ruby"}]}
 {"label":"PROGLANG","pattern":[{"LOWER":{"REGEX":"(ruby\\d+\\.?\\d*.?\\d*)"}}]}
 {"label":"PROGLANG","pattern":[{"LOWER":"ruby"},{"TEXT":{"REGEX":"(\\d+\\.?\\d*.?\\d*)"}}]}
-{"label":"PROGLANG","pattern":[{"LOWER":"php"}]}
+{"label":"PROGLANG","pattern":[{"LOWER":"pp"}]}
 {"label":"PROGLANG","pattern":[{"LOWER":{"REGEX":"(php\\d+\\.?\\d*.?\\d*)"}}]}
 {"label":"PROGLANG","pattern":[{"LOWER":"php"},{"TEXT":{"REGEX":"(\\d+\\.?\\d*.?\\d*)"}}]}
 {"label":"PROGLANG","pattern":[{"LOWER":"python"}]}
