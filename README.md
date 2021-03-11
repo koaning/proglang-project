@@ -1,14 +1,8 @@
-# Detecting Programming Languages
+# 🪐 Programming Languages in Stackoverflow and Reddit (NER)
 
 This project contains a spaCy project to detect programming languages. We compare spaCy NER models and a pattern matcher model. 
 
 You can find a youtube series on these models on [this playlist](). The first 5 videos are made using spaCy 2.3, if you're interested in learning more about this project structure it'd be better to start watching [here](). 
-
-<!-- SPACY PROJECT: AUTO-GENERATED DOCS START (do not remove) -->
-
-# 🪐 spaCy Project: Detecting Programming Languages in Stackoverflow and Reddit (Named Entity Recognition)
-
-This project attempts to detect programming languages.
 
 ## 📋 project.yml
 
@@ -52,5 +46,3 @@ in the project directory.
 | --- | --- | --- |
 | [`assets/stackoverflow-train.jsonl`](assets/stackoverflow-train.jsonl) | Local | JSONL-formatted training data |
 | [`assets/stackoverflow-valid.jsonl`](assets/stackoverflow-valid.jsonl) | Local | JSONL-formatted validation data |
-
-<!-- SPACY PROJECT: AUTO-GENERATED DOCS END (do not remove) -->
