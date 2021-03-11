@@ -1,5 +1,5 @@
-title: "Detecting Programming Languages in Stackoverflow and Reddit (Named Entity Recognition)"
-description: "This project attempts to detect programming languages."
+title: "Programming Languages NER"
+description: "This project attempts to detect programming languages using datasets from Stackoverflow and Reddit. The goal of the project is to make a model that could be used generally but it will specifically be used as a sentiment analysis exercise on reddit. We'd like to investigate how the different communities think about different programming languages."
 # Variables can be referenced across the project.yml using ${vars.var_name}
 vars:
   config: "config.cfg"
